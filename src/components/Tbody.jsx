@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../providers/auth';
 
 export default function Tbody() {
+  const { filterList } = useContext(AuthContext);
+
   return (
     <tbody>
-      { planetList.map((planet) => (
+      { filterList.map((planet) => (
         <tr key={ planet.name }>
           <td>{planet.name}</td>
           <td>{planet.rotation_period}</td>

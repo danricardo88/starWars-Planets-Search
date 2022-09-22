@@ -11,12 +11,15 @@ export const AuthProvider = ({ children }) => {
     operador: 'maior que',
     value: '0',
   }]);
+  const [name, setName] = useState('');
 
   const setContext = {
     planetList,
     setPlanetList,
     filterList,
     setFilterList,
+    nameFiltered: { name },
+    setNameFiltered: { setName },
   };
 
   useEffect(() => {
@@ -24,11 +27,16 @@ export const AuthProvider = ({ children }) => {
       const { results } = await fetch(api).then((response) => response.json());
       results.map((result) => delete result.residents);
       setPlanetList(results);
-      // setFilterList(results);
+      setFilterList(results);
     };
     getApi();
   }, []);
-  console.log(setContext);
+
+  useEffect(() => {
+    setFilterList(planetList.filter((planet) => (
+      ((planet.name).toLowerCase()).includes(name.toLowerCase())
+    )));
+  }, [name]);
 
   return (
     <AuthContext.Provider value={ setContext }>
