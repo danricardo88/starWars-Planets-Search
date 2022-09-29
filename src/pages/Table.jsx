@@ -1,21 +1,24 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../providers/auth';
-import Tbody from '../components/Tbody';
-// import InputNameSearch from '../components/InputNameSearch';
 
 export default function Table() {
-  const { filterList } = useContext(AuthContext);
+  const { DATA,
+    planetList,
+    selectedFilters,
+    // setSelectedFilters,
+    // filters,
+    // setFilters,
+  } = useContext(AuthContext);
   const keys = [];
 
-  if (filterList.length > 0) {
-    Object.keys(filterList[0]).forEach((key) => {
+  if (DATA.length > 0) {
+    Object.keys(DATA[0]).forEach((key) => {
       keys.push(key);
     });
   }
-  // console.log(keys);
+
   return (
     <table>
-      {/* <InputNameSearch /> */}
       <thead>
         <tr>
           {keys.map((key) => (
@@ -23,7 +26,53 @@ export default function Table() {
           ))}
         </tr>
       </thead>
-      <Tbody />
+      <tbody>
+        {
+          DATA
+            .filter((planet) => (
+              planet.name.toLowerCase().includes(planetList.toLowerCase())
+            ))
+            .filter((planet) => {
+              const filtrado = [];
+
+              selectedFilters.forEach((filter) => {
+                switch (filter.comparison) {
+                case 'maior que':
+                  filtrado.push(Number(planet[filter.column]) > Number(filter.value));
+                  break;
+                case 'menor que':
+                  filtrado.push(Number(planet[filter.column]) < Number(filter.value));
+                  break;
+                case 'igual a':
+                  filtrado.push(Number(planet[filter.column]) === Number(filter.value));
+                  break;
+                default:
+                  break;
+                }
+              });
+
+              return filtrado.every((filtrados) => filtrados);
+            })
+
+            .map((planet) => (
+              <tr key={ planet.name }>
+                <td>{planet.name}</td>
+                <td>{planet.rotation_period}</td>
+                <td>{planet.orbital_period}</td>
+                <td>{planet.diameter}</td>
+                <td>{planet.climate}</td>
+                <td>{planet.gravity}</td>
+                <td>{planet.terrain}</td>
+                <td>{planet.surface_water}</td>
+                <td>{planet.population}</td>
+                <td>{planet.films}</td>
+                <td>{planet.created}</td>
+                <td>{planet.edited}</td>
+                <td>{planet.url}</td>
+              </tr>
+            ))
+        }
+      </tbody>
     </table>
   );
 }
