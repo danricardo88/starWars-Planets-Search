@@ -1,10 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AuthContext } from '../providers/auth';
 
 function InputNumberSeach() {
   const { planetList, setPlanetList } = useContext(AuthContext);
   const { filters, setFilters } = useContext(AuthContext);
   const { selectedFilters, setSelectedFilters } = useContext(AuthContext);
+  const { fils, setFils } = useContext(AuthContext);
+
+  useEffect(() => {
+    function test() {
+      setFilters({
+        column: fils[0],
+        comparison: 'maior que',
+        value: 0,
+      });
+    }
+    test();
+  }, [fils]);
 
   return (
     <div>
@@ -27,11 +39,16 @@ function InputNumberSeach() {
           onChange={ ({ target }) => setFilters((prevSelect) => ({
             ...prevSelect, column: target.value })) }
         >
-          <option value="population">population</option>
+          {fils.map((fil, i) => (
+            <option key={ i } value={ fil }>{fil}</option>
+          ))}
+
+          {/* <option value="population">population</option>
           <option value="orbital_period">orbital_period</option>
           <option value="diameter">diameter</option>
           <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          <option value="surface_water">surface_water</option> */}
+
         </select>
 
         <select
@@ -62,11 +79,12 @@ function InputNumberSeach() {
             setSelectedFilters((prevSelect) => ([
               ...prevSelect, filters,
             ]));
-            setFilters({
-              column: 'population',
-              comparison: 'maior que',
-              value: 0,
-            });
+            setFils(fils.filter((fil) => fil !== filters.column));
+            // setFilters({
+            //   column: 'population',
+            //   comparison: 'maior que',
+            //   value: 0,
+            // });
           } }
         >
           Filtrar

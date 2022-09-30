@@ -14,6 +14,8 @@ export const AuthProvider = ({ children }) => {
     value: 0,
   });
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [fils, setFils] = useState(['population', 'orbital_period',
+    'diameter', 'rotation_period', 'surface_water']);
 
   const setContext = {
     DATA,
@@ -24,6 +26,8 @@ export const AuthProvider = ({ children }) => {
     setFilters,
     selectedFilters,
     setSelectedFilters,
+    fils,
+    setFils,
   };
 
   useEffect(() => {
