@@ -89,6 +89,18 @@ function InputNumberSeach() {
         >
           Filtrar
         </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ () => {
+            const array = [];
+            selectedFilters.forEach(({ column }) => array.push(column));
+            setFils([...fils, ...array]);
+            setSelectedFilters([]);
+          } }
+        >
+          Limpar Filtros
+        </button>
       </form>
       {selectedFilters.map((filter, index) => (
         <div
@@ -97,6 +109,16 @@ function InputNumberSeach() {
           key={ index }
         >
           <span>
+            <button
+              type="button"
+              onClick={ () => {
+                setSelectedFilters(selectedFilters
+                  .filter((fil) => fil.column !== filter.column));
+                setFils([...fils, filter.column]);
+              } }
+            >
+              X
+            </button>
             {filter.column}
             {' '}
             {filter.comparison}
